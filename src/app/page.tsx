@@ -17,6 +17,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const assetBase = "https://cdn.prod.website-files.com/63fa240476d6a3dc2954208b";
 
@@ -46,7 +47,7 @@ const stats = [
   ["6", "Niezapomnianych dni"],
   ["12", "Gier i atrakcji"],
   ["16", "Warsztatów"],
-  ["~400", "Uczestników"],
+  ["400", "Uczestników"],
 ];
 
 const aboutCards = [
@@ -154,14 +155,33 @@ function SocialLinks({ compact = false }: { compact?: boolean }) {
           rel="noreferrer"
           aria-label={label}
           className={cn(
-            "grid place-items-center rounded-full bg-white text-[#ff9048] shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:text-[#d96f28]",
-            compact ? "size-9" : "size-10",
+            "grid place-items-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5",
+            compact ? "size-10" : "size-12",
           )}
         >
-          <img src={image} alt="" className="size-4 object-contain" />
+          <img src={image} alt="" className="size-7 object-contain" />
         </a>
       ))}
     </div>
+  );
+}
+
+function FadeInSection({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<typeof motion.section>) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.15 }}
+      className={className}
+      {...props}
+    >
+      {children}
+    </motion.section>
   );
 }
 
@@ -228,7 +248,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-white text-[#381000]">
       {bannerVisible ? (
-        <section className="relative z-50 bg-[#ffd080] px-4 py-3 text-[#381000]">
+        <section className="relative z-50 bg-gradient-to-r from-[#7fa9cf] to-[#f9cc7f] px-4 py-3 text-white">
           <button
             aria-label="Zamknij informator"
             onClick={() => setBannerVisible(false)}
@@ -271,7 +291,7 @@ export default function Home() {
         </section>
       ) : null}
 
-      <section className="relative isolate min-h-[780px] bg-[#171717] text-white">
+      <section className="relative isolate min-h-[970px] bg-[#171717] text-white">
         <img
           src={images.hero}
           alt=""
@@ -291,7 +311,7 @@ export default function Home() {
             <SocialLinks compact />
           </div>
 
-          <nav className="mt-5 flex items-center justify-between rounded-full bg-white/14 px-4 py-3 backdrop-blur-md">
+          <nav className="mt-5 flex items-center justify-between rounded-full bg-transparent px-4 py-3">
             <a href="#" className="flex items-center">
               <img src={images.logo} alt="Obóz Studentów PWr" className="h-14 w-auto" />
             </a>
@@ -300,7 +320,7 @@ export default function Home() {
                 <a
                   key={item.href}
                   href={item.href}
-                  className="text-sm font-extrabold text-white/90 transition hover:text-[#ffd080]"
+                  className="text-sm font-extrabold text-white transition-colors duration-300 hover:text-white/70"
                 >
                   {item.label}
                 </a>
@@ -350,29 +370,34 @@ export default function Home() {
               href="https://www.facebook.com/ObozPWr?locale=pl_PL"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ff9048] px-6 py-4 text-sm font-black text-[#381000] transition hover:bg-[#d96f28]"
             >
-              <img src={images.facebookLogo} alt="" className="size-4 rounded-sm object-contain" />
-              Dołącz do wydarzenia
+              <Button variant="yellow" className="mt-5 w-full">
+                <img
+                  src={images.facebookLogo}
+                  alt=""
+                  className="size-4 object-contain"
+                />
+                Dołącz do wydarzenia
+              </Button>
             </a>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#f0f8d8] px-5 py-12">
+      <FadeInSection className="bg-gradient-to-r from-[#7fa9cf] to-[#f9cc7f] px-5 py-12">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-4">
           {stats.map(([value, label]) => (
             <div key={label} className="text-center">
-              <div className="text-5xl font-black text-[#ff9048] md:text-6xl">{value}</div>
-              <h2 className="mt-2 text-lg font-black text-[#381000]">{label}</h2>
+              <div className="text-5xl font-bold text-white md:text-6xl">{value}</div>
+              <h2 className="mt-2 text-lg font-bold text-white">{label}</h2>
             </div>
           ))}
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="about-2" className="px-5 py-24">
+      <FadeInSection id="about-2" className="px-5 py-24">
         <div className="mx-auto max-w-6xl text-center">
-          <img src={images.mark} alt="" className="mx-auto mb-5 size-20" />
+          <img src={images.mark} alt="" className="mx-auto mb-5 size-50" />
           <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ff9048]">#JedźnaObóz</p>
           <h2 className="mt-3 text-4xl font-black text-[#381000] md:text-5xl">Obóz Studentów PWr</h2>
           <img
@@ -392,9 +417,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="attractions" className="bg-[#f0f8d8] px-5 py-24">
+      <FadeInSection id="attractions" className="bg-[linear-gradient(45deg,#7fa9cf_0%,#f5f5db_70%,#f9cc7f_100%)] px-5 py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ff9048]">#Atrakcje</p>
@@ -404,12 +429,22 @@ export default function Home() {
           </div>
 
           <Tabs.Root defaultValue="party" className="mt-12">
-            <Tabs.List className="grid gap-3 rounded-[1.5rem] bg-white p-3 shadow-sm ring-1 ring-[#ead7b8] md:grid-cols-4">
+            <Tabs.List className="grid gap-4 md:grid-cols-4">
               {attractions.map(({ value, title, icon: Icon }) => (
                 <Tabs.Tab
                   key={value}
                   value={value}
-                  className="group flex items-center justify-center gap-3 rounded-2xl px-4 py-4 text-sm font-black text-[#6f5847] outline-none transition data-[selected]:bg-[#ff9048] data-[selected]:text-[#381000]"
+                  className="
+                    group flex items-center justify-center gap-3
+                    rounded-2xl bg-white px-4 py-5
+                    text-sm font-black text-[#6f5847]
+                    outline-none ring-2 ring-white
+                    transition-all duration-300
+                    hover:ring-[#ff9048]
+                    data-[selected]:ring-[#f9cc7f]
+                    data-[selected]:text-[#381000]
+                  
+                  "
                 >
                   <Icon className="size-5" />
                   {title}
@@ -430,9 +465,9 @@ export default function Home() {
             ))}
           </Tabs.Root>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="faq" className="px-5 py-24">
+      <FadeInSection id="faq" className="px-5 py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ff9048]">#FAQ</p>
@@ -468,9 +503,9 @@ export default function Home() {
             ))}
           </Accordion.Root>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="history" className="px-5 py-24">
+      <FadeInSection id="history" className="px-5 py-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ff9048]">#TAKBYŁO</p>
@@ -478,12 +513,11 @@ export default function Home() {
             <p className="mt-5 text-lg font-medium leading-8 text-[#6f5847]">
               Poprzednie edycje najlepiej pokazują tempo, energię i atmosferę wyjazdu. Zobacz archiwum obozów, tematy przewodnie i ludzi, którzy je współtworzyli.
             </p>
-            <a
-              href="/history"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#ff9048] px-6 py-3 text-sm font-black text-[#381000] transition hover:bg-[#d96f28]"
-            >
-              <Play className="size-4 fill-current" />
-              Poprzednie lata
+            <a href="/history">
+              <Button variant="yellow" className="mt-7">
+                <Play className="size-4 fill-current" />
+                Poprzednie lata
+              </Button>
             </a>
           </div>
           <a
@@ -499,9 +533,9 @@ export default function Home() {
             </span>
           </a>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section className="px-5 py-24">
+      <FadeInSection className="px-5 py-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1fr] lg:items-center">
           <div>
             <h2 className="text-4xl font-black md:text-5xl">Kim jesteśmy?</h2>
@@ -524,41 +558,47 @@ export default function Home() {
           </div>
           <img src={images.team} alt="" className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-[0_25px_70px_rgba(56,16,0,0.16)]" />
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="cooperation" className="bg-[#456f97] px-5 py-24 text-white">
+      <FadeInSection id="cooperation" className="bg-[linear-gradient(45deg,#7fa9cf_0%,#f5f5db_75%,#f9cc7f_100%)] px-5 py-24">
         <div className="mx-auto max-w-6xl text-center">
           <h2 className="text-5xl font-black">Współpraca</h2>
-          <p className="mx-auto mt-5 max-w-3xl text-lg font-medium leading-8 text-white/82">
+          <p className="mx-auto mt-5 max-w-3xl text-lg font-medium leading-8 text-[#6f5847]/82">
             Obóz Studentów PWr to unikalna okazja do zaangażowania się w projekt, który skupia aktywnych, ambitnych i otwartych na nowe doświadczenia studentów oraz promuje wartości bliskie nowoczesnym przedsiębiorstwom.
           </p>
-          <a
-            href="mailto:oboz@samorzad.pwr.edu.pl?subject=Współpraca - Obóz Studentów PWr"
-            className="mt-8 inline-flex rounded-full bg-white px-7 py-4 text-sm font-black text-[#381000] transition hover:bg-[#f0f8d8]"
-          >
-            Skontaktuj się z nami!
+          <a href="mailto:oboz@samorzad.pwr.edu.pl?subject=Współpraca - Obóz Studentów PWr">
+            <Button variant="yellow" className="mt-8">
+              Skontaktuj się z nami!
+            </Button>
           </a>
           <div className="mt-14 grid gap-6 md:grid-cols-2">
             <img src={images.coopOne} alt="" className="h-80 w-full rounded-[2rem] object-cover" />
             <img src={images.coopTwo} alt="" className="h-80 w-full rounded-[2rem] object-cover" />
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section className="px-5 py-24">
+      <FadeInSection className="px-5 py-24">
         <div className="mx-auto max-w-6xl">
           <h2 className="text-center text-4xl font-black md:text-5xl">Partnerzy</h2>
-          <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-12 flex flex-wrap justify-center gap-5">
             {partners.map((src) => (
-              <div key={src} className="flex h-32 items-center justify-center rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#ead7b8]">
-                <img src={src} alt="" className="max-h-20 max-w-full object-contain" />
+              <div
+                key={src}
+                className="flex h-48 w-[270px] items-center justify-center rounded-[1.75rem] bg-[#d9d9e3] p-6"
+              >
+                <img
+                  src={src}
+                  alt=""
+                  className="max-h-20 max-w-full object-contain"
+                />
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
-      <section id="contact-form" className="bg-white px-5 py-24">
+      <FadeInSection id="contact-form" className="bg-white px-5 py-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#ff9048]">#Kontakt</p>
@@ -577,7 +617,7 @@ export default function Home() {
 
           <form
             onSubmit={submitContact}
-            className="rounded-[2rem] bg-[#f0f8d8] p-6 shadow-[0_24px_70px_rgba(56,16,0,0.10)] ring-1 ring-[#ead7b8] md:p-8"
+            className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(56,16,0,0.12)] md:p-10"
           >
             <div className="grid gap-5 md:grid-cols-2">
               <label className="grid gap-2 text-sm font-black text-[#381000]">
@@ -610,20 +650,26 @@ export default function Home() {
                 />
               </label>
             </div>
-            <button
+            <Button
+              variant="yellow"
               type="submit"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#ff9048] px-7 py-4 text-sm font-black text-[#381000] transition hover:bg-[#d96f28] md:w-auto"
+              className="mt-6 w-full md:w-auto"
             >
               Wyślij wiadomość
-            </button>
+            </Button>
           </form>
         </div>
-      </section>
+      </FadeInSection>
 
-      <footer id="contact" className="bg-[#f0f8d8] px-5 py-14">
+      <div className="h-[2px] w-full bg-[#381000]" />
+      <footer
+        id="contact"
+        className="bg-[linear-gradient(45deg,#7fa9cf_0%,#f5f5db_75%,#f9cc7f_100%)] px-5 py-14"
+      >
+
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.4fr_0.8fr_0.8fr]">
           <div>
-            <img src={images.logo} alt="Obóz Studentów PWr" className="h-20 w-auto" />
+            <img src={images.logo} alt="Obóz Studentów PWr" className="h-8 w-auto" />
             <p className="mt-5 max-w-md text-base font-medium leading-7 text-[#6f5847]">
               Tydzień niesamowitych warsztatów, szkoleń i integracji studentów naszej uczelni.
             </p>
@@ -651,10 +697,12 @@ export default function Home() {
             </ul>
           </div>
         </div>
-        <p className="mx-auto mt-12 max-w-6xl border-t border-[#ead7b8] pt-6 text-sm font-bold text-[#9a806a]">
+        <p className="mx-auto mt-12 max-w-6xl border-t border-[#381000] pt-6 text-sm font-bold text-[#381000]">
           Copyright © Sztab Obozu Studentów PWr
         </p>
       </footer>
     </main>
   );
 }
+
+
